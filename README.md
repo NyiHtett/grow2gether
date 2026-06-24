@@ -2,6 +2,7 @@
 
 initial structure
 
+```text
 grow2gether/
 ├── frontend/
 │   ├── src/
@@ -13,4 +14,4 @@ grow2gether/
 │   └── venv/
 │
 └── README.md
-
+```
