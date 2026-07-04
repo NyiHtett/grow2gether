@@ -32,10 +32,10 @@ def welcome():
 @app.route('/api/invite', methods = ['POST'])
 # @firebase_authentication_needed
 def createInvite(): 
-    
-    userID = request.json.get("uid")
-    dataForInvite =  db.invites.find_one({"senderID": userID, "isUsed": "false"})
-    if not dataForInvite: 
+    # userID = request.json.get("uid")
+    # dataForInvite =  db.invites.find_one({"senderID": userID, "isUsed": "false"})
+    # if not dataForInvite: 
+        userID = request.json.get("uid")
         character_pool = string.ascii_letters + string.digits
         unique_code = "".join(secrets.choice(character_pool) for _ in range(6))
         # client.invite.create()
@@ -46,8 +46,9 @@ def createInvite():
             "isUsed": "false",
         })
         return jsonify(db.invites.find_one({"unique_code": unique_code}, {"_id": 0}))
-    else:
-        print("user already has an invite link")
+    # else:
+    #     print("user already has an invite link")
+    #     return jsonify("user already has an invite link")
         
 
     
