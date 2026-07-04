@@ -25,16 +25,19 @@ export function HomeScreen({ go }: { go: (r: Route) => void }) {
   
       // request invite link from backend (authenticate using the token)
       // method, headers, body(along with current userid)
-      const res = await fetch("http://localhost:3000/api/invite", {
+      const res = await fetch("https://grow2gether.onrender.com/api/invite", {
         "method": "POST", 
-        "headers": {"Content-Type": "application/json"}, 
+        "headers": {
+          "Content-Type": "application/json", 
+          "Authorization": `Bearer ${token}`,
+        }, 
         "body": JSON.stringify({"uid": auth.currentUser?.uid})
       }) 
       
       const data = await res.json()
-      setLink(data.unique_code)
+      setLink("https://grow2gether.onrender.com/" + "" + data.unique_code)
 
-      
+
       // construct sign up link for the other user
     }
   return (

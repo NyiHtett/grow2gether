@@ -16,7 +16,7 @@ MONGODB_URI = os.environ.get("MONGODB_URI")
 client = pymongo.MongoClient(MONGODB_URI)
 db = client["Grow2gether"]
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:5173", "https://grow2gether.vercel.app"], supports_credentials=True)
+CORS(app, origins=["http://localhost:5173", "https://grow2gether.onrender.com/"], supports_credentials=True)
 # path for generating data format 
 # ask firebase for authentication
 # show the link with the button
@@ -32,6 +32,7 @@ def welcome():
 @app.route('/api/invite', methods = ['POST'])
 # @firebase_authentication_needed
 def createInvite(): 
+    
     userID = request.json.get("uid")
     dataForInvite =  db.invites.find_one({"senderID": userID, "isUsed": "false"})
     if not dataForInvite: 
