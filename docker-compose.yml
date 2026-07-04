@@ -3,10 +3,15 @@ services:
     build: ./frontend/react-ts
     ports:
       - "5173:5173"
+    volumes:
+      - ./frontend/react-ts:/app
+      - /app/node_modules
     depends_on:
       - backend
 
   backend:
     build: ./backend
+    volumes: 
+      - ./backend:/app
     ports:
       - "3000:3000"
