@@ -3,6 +3,6 @@ FROM python:3.12-slim
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt gunicorn
 COPY . . 
-CMD ["python", "app.py"]
+CMD gunicorn -b 0.0.0.0:$PORT app:app
