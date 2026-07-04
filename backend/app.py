@@ -52,8 +52,7 @@ def createInvite():
     
 #     take the code that is passed in the request and look for the exact code in the invite documents
 @app.route('/api/invite/accept/<code>', methods = ['GET'])
-def acceptInvite():
-    code = code
+def acceptInvite(code):
     another = db.invites.find({})
     print(another)
     # mongoDB doesn't know how to jsonify the _id field, we will exclude it
@@ -62,8 +61,22 @@ def acceptInvite():
         return jsonify({"found the code": anotherPersonIndex})
     else:
         return jsonify({"code not found": code})
-        
+    # sign in the user
+    # create a record in the invite 
+    
+#     once found delete both invite code and replace with mutual unique paired Id 
+#@app.route('/test/addPairID', methods = ['POST'])
+def addPairID():
+    code = code
+    pairID = generatePairID()
+    db.invites.update_one({"unique_code": code}, {"$set": {"pairID": pairID,"isUsed": True}} ,upsert = False)
+    return "the pair is added"
 
+#     pair them in the pairs collection
+# @app.route('/test/addPairs', methods = ['POST'])
+def addPairCollection(): 
+    db.pairs.insert_one({"user1": "kyaw", "user2": "nyi"})
+    return "pair adding is successful"
     
 #     if there is pairId in their data, there should be image of the other person next to them (frontend)
 #     and once you look into the pages, you will store the data specifically for you two. 
@@ -72,19 +85,11 @@ def acceptInvite():
 
 
     
-#     once found delete both invite code and replace with mutual unique paired Id 
-@app.route('/test/addPairID', methods = ['POST'])
-def addPairID():
-    pairID = generatePairID()
-    code = "qVbI5c"
-    db.invites.update_one({"unique_code": code}, {"$set": {"pairID": pairID,"isUsed": True}} ,upsert = False)
-    return "the pair is added"
 
-#     pair them in the pairs collection
-@app.route('/test/addPairs', methods = ['POST'])
-def addPairCollection(): 
-    db.pairs.insert_one({"user1": "kyaw", "user2": "nyi"})
-    return "pair adding is successful"
+
+
+
+
     
 # @app.route('/api/invite/<code>', methods = ['GET'])
 # def getInviteLink(code): 
