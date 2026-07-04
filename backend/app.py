@@ -49,12 +49,29 @@ def createInvite():
     # else:
     #     print("user already has an invite link")
     #     return jsonify("user already has an invite link")
+    
+#     take the code that is passed in the request and look for the exact code in the invite documents
+@app.route('/api/invite/accept/<code>', methods = ['GET'])
+def acceptInvite():
+    code = code
+    another = db.invites.find({})
+    print(another)
+    # mongoDB doesn't know how to jsonify the _id field, we will exclude it
+    anotherPersonIndex = db.invites.find_one({"unique_code": code}, {"_id": 0})
+    if anotherPersonIndex: 
+        return jsonify({"found the code": anotherPersonIndex})
+    else:
+        return jsonify({"code not found": code})
         
 
     
 #     if there is pairId in their data, there should be image of the other person next to them (frontend)
 #     and once you look into the pages, you will store the data specifically for you two. 
 
+
+
+
+    
 #     once found delete both invite code and replace with mutual unique paired Id 
 @app.route('/test/addPairID', methods = ['POST'])
 def addPairID():
@@ -68,19 +85,6 @@ def addPairID():
 def addPairCollection(): 
     db.pairs.insert_one({"user1": "kyaw", "user2": "nyi"})
     return "pair adding is successful"
-
-#     take the code that is passed in the request and look for the exact code in the invite documents
-@app.route('/test/codeLookUp')
-def codeLookUp():
-    code = "qVbI5c"
-    another = db.invites.find({})
-    print(another)
-    # mongoDB doesn't know how to jsonify the _id field, we will exclude it
-    anotherPersonIndex = db.invites.find_one({"unique_code": code}, {"_id": 0})
-    if anotherPersonIndex: 
-        return jsonify({"found the code": anotherPersonIndex})
-    else:
-        return jsonify({"code not found": code})
     
 # @app.route('/api/invite/<code>', methods = ['GET'])
 # def getInviteLink(code): 

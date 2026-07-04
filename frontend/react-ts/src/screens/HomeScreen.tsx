@@ -35,7 +35,7 @@ export function HomeScreen({ go }: { go: (r: Route) => void }) {
       }) 
       
       const data = await res.json()
-      setLink("https://grow2gether.onrender.com/" + "" + data.unique_code)
+      setLink("https://grow2gether.onrender.com/invite/accept/" + "" + data.unique_code)
 
 
       // construct sign up link for the other user
