@@ -16,7 +16,7 @@ MONGODB_URI = os.environ.get("MONGODB_URI")
 client = pymongo.MongoClient(MONGODB_URI)
 db = client["Grow2gether"]
 app = Flask(__name__)
-CORS(app, origins=["https://grow2gether-omega.vercel.app", "https://grow2gether.onrender.com"], supports_credentials=True)
+CORS(app, origins=["https://grow2gether-omega.vercel.app", "https://grow2gether.onrender.com", "http://localhost:5173"], supports_credentials=True)
 # path for generating data format 
 # ask firebase for authentication
 # show the link with the button
