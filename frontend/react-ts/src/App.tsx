@@ -55,7 +55,7 @@ function Router() {
       {route.name === "photos" && <PhotoDumpScreen />}
       {route.name === "study" && <StudyScreen />}
       {route.name === "thoughts" && <ThoughtsScreen />}
-      {route.name === "auth" && <InviteScreen go={go} />}
+      {route.name === "auth" && <InviteScreen/>}
     </div>
   );
 }
