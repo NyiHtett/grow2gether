@@ -1,6 +1,4 @@
 
-import { useEffect, useState } from "react";
-import { AvatarPair } from "./AvatarPair";
 import { GrowArrows, ChevronLeft } from "./icons";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { auth } from "@/firebase";
