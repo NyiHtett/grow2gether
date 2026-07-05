@@ -126,6 +126,7 @@ export function PhotoDumpScreen() {
             onClose={() => setCameraDate(null)}
             onCapture={(dataUrl, caption) => {
               //addPhoto(dataUrl, cameraDate, caption);
+              console.log(dataUrl, caption)
               setCameraDate(null);
             }}
           />

@@ -1,7 +1,4 @@
-
-import type { Route } from "../types";
-
-function InviteScreen({go}: {go: (r: Route) => void}) {
+function InviteScreen() {
   return (
     <div>InviteScreen</div>
   )

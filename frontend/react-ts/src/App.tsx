@@ -51,7 +51,7 @@ function Router() {
     <div className="no-scrollbar mx-auto flex min-h-[100svh] w-full max-w-[480px] flex-col border-x border-white/10">
       <AppBar photoURL={auth.currentUser?.photoURL} onBack={onSubScreen ? () => go({ name: "home" }) : undefined} />
       {route.name === "home" && <HomeScreen go={go} />}
-      {route.name === "invite" && <InviteScreen go={go} />}
+      {route.name === "invite" && <InviteScreen />}
       {route.name === "photos" && <PhotoDumpScreen />}
       {route.name === "study" && <StudyScreen />}
       {route.name === "thoughts" && <ThoughtsScreen />}
