@@ -34,7 +34,7 @@ export function ThoughtsScreen() {
     else {
       console.log("No user is signed in.");
     }
-    auth.getAuth(); 
+    //auth.getAuth(); 
     setText("");
   };
 
