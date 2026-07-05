@@ -10,6 +10,7 @@ import { StudyScreen } from "./screens/StudyScreen";
 import { ThoughtsScreen } from "./screens/ThoughtsScreen";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { auth } from "./firebase";
+import InviteScreen from "./screens/InviteScreen";
 
 function Router() {
   const [user, setUser] = useState<User | null> (null); 
@@ -43,8 +44,7 @@ function Router() {
       </div>
     );
   }
-    
-
+  
   const onSubScreen = route.name !== "home";
 
   return (

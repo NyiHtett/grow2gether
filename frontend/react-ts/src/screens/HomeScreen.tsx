@@ -26,7 +26,7 @@ export function HomeScreen({ go }: { go: (r: Route) => void }) {
   
       // request invite link from backend (authenticate using the token)
       // method, headers, body(along with current userid)
-      const res = await fetch("https://grow2gether.onrender.com/api/invite", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/invite`, {
         "method": "POST", 
         "headers": {
           "Content-Type": "application/json", 
@@ -36,7 +36,7 @@ export function HomeScreen({ go }: { go: (r: Route) => void }) {
       }) 
       
       const data = await res.json()
-      setLink("https://grow2gether.onrender.com/invite/"+ "" + data.unique_code)
+      setLink(`${import.meta.env.VITE_API_URL}/invite/${data.inviteCode}`) // set the link state to the invite link
       // construct sign up link for the other user
     }
   return (
