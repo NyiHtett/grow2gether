@@ -9,12 +9,27 @@ import type { Route } from "@/types";
 
 
 /** Step 1 — register yourself (shown full-screen when nobody is logged in). */
-export function RegisterScreen({go}: {go: (r: Route) => void}) {
+export function RegisterScreen({go, inviteCode}: {go: (r: Route) => void; inviteCode: string | null}) {
   
 
   const handleGoogleSignIn = async () => {
   const provider = new GoogleAuthProvider();
-  await signInWithPopup(auth, provider);
+  const result = await signInWithPopup(auth, provider);
+
+  // code for searching the partner
+  if(inviteCode) {
+    const token = result.user.getIdToken;
+    const res = await fetch(`https://grow2gether.onrender.com/api/invite/accept/${inviteCode}`, {
+      "method" : 'GET', 
+      "headers" : {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      }, 
+      "body": JSON.stringify({"uid": auth.currentUser?.uid}) // change for production
+    })
+    const data = await res.json(); 
+    console.log("the two users are paired", data); 
+  }
   go({name: "home"});
   };
   return (

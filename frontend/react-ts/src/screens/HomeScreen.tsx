@@ -4,6 +4,7 @@ import type { Route } from "../types";
 import type { ComponentType, SVGProps } from "react";
 import { auth } from "@/firebase";
 import { useState } from "react";
+import { signOut } from "firebase/auth";
 const FEATURES: {
   route: Route["name"];
   label: string;
@@ -29,15 +30,13 @@ export function HomeScreen({ go }: { go: (r: Route) => void }) {
         "method": "POST", 
         "headers": {
           "Content-Type": "application/json", 
-          "Authorization": `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`, 
         }, 
-        "body": JSON.stringify({"uid": auth.currentUser?.uid})
+        "body": JSON.stringify({"uid": auth.currentUser?.uid}) // change for production
       }) 
       
       const data = await res.json()
-      setLink("https://grow2gether.onrender.com/invite/accept/" + "" + data.unique_code)
-
-
+      setLink("https://grow2gether.onrender.com/invite/"+ "" + data.unique_code)
       // construct sign up link for the other user
     }
   return (
@@ -84,6 +83,10 @@ export function HomeScreen({ go }: { go: (r: Route) => void }) {
         <button onClick = {() => {
           navigator.clipboard.writeText(link || "")
         }}> Copy </button> 
+        <button onClick = {() => {
+          signOut(auth)
+        }}
+        > Log Out </button>
       </div>
       
     </div>

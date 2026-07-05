@@ -15,6 +15,18 @@ function Router() {
   const [user, setUser] = useState<User | null> (null); 
   const [route, setRoute] = useState<Route>({ name: "home" });
   const go = (r: Route) => setRoute(r);
+  const [inviteCode, setInviteCode] = useState<string | null>(null);
+
+  // stores the data from the url
+  useEffect(() => {
+    const path = window.location.pathname;
+    const match = path.match(/^\/invite\/(.+)$/)
+    if(match) {
+      console.log(match[1])
+      setInviteCode(match[1])
+    }
+    
+  }, [])
 
   // Not registered yet → force the register screen (no app bar).
   useEffect(() => {
@@ -27,7 +39,7 @@ function Router() {
   if(!user) {
     return (
       <div className="mx-auto flex min-h-[100svh] w-full max-w-[480px] flex-col border-x border-white/10">
-        <RegisterScreen go = {go}/>
+        <RegisterScreen go={go} inviteCode={inviteCode}/>
       </div>
     );
   }
