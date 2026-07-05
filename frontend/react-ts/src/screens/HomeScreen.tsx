@@ -36,6 +36,7 @@ export function HomeScreen({ go }: { go: (r: Route) => void }) {
       }) 
       
       const data = await res.json()
+      console.log(data)
       setLink(`${import.meta.env.VITE_API_URL}/invite/${data.inviteCode}`) // set the link state to the invite link
       // construct sign up link for the other user
     }
