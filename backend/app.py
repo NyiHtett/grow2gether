@@ -53,10 +53,18 @@ def createInvite():
 #     take the code that is passed in the request and look for the exact code in the invite documents
 @app.route('/api/invite/accept/<code>', methods = ['GET', 'POST'])
 def acceptInvite(code):
+    print("accepting the invite")
+    
+    print("self authentication is started")
+    uid = request.uid;
+    print("self authentication is ended")
+    
+    print("another person authentication is started")
     anotherPerson = db.invites.find_one({"unique_code": code}, {"_id": 0})
     anotherPersonUID = anotherPerson["senderID"]
     print(anotherPersonUID)
-    uid = request.uid;
+    print("another person authentication is ended")
+    
     pairID = generatePairID();
     db.invites.update_one({"unique_code": code}, {"$set": {"pairID": pairID,"isUsed": True}} ,upsert = False)
     print("the pair is added")
