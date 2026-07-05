@@ -1,8 +1,5 @@
 
 import { GrowArrows, ChevronLeft } from "./icons";
-import { onAuthStateChanged, type User } from "firebase/auth";
-import { auth } from "@/firebase";
-
 export function AppBar({ photoURL, onBack }: { photoURL: string | null | undefined; onBack?: () => void }) {
   return (
     <header className="sticky top-0 z-20 flex items-center justify-between gap-3 border-b border-white/10 px-[18px] py-3.5 backdrop-blur-xl bg-ink-0/70">

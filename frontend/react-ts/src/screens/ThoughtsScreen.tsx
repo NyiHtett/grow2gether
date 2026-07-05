@@ -1,18 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import { SendIcon } from "../components/icons";
-import { cn } from "../lib/cn";
 import { auth } from "../firebase";   
 
-function fmtWhen(ts: number) {
-  return new Date(ts).toLocaleDateString(undefined, {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  }) +
-    " at " +
-    new Date(ts).toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
-}
 
 export function ThoughtsScreen() {
   const user = auth.currentUser;
