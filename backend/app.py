@@ -12,7 +12,7 @@ from firebase_admin import auth
 import os
 import json
 
-firebase_cred = os.environ.get("FIREBASE_CREDENTIALS")
+firebase_cred = os.environ.get("FIREBASE_SERVICE_ACCOUNT_KEY")
 cred = credentials.Certificate(json.loads(firebase_cred))
 firebase_admin.initialize_app(cred)
 # get database connection link
