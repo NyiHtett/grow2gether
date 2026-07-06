@@ -130,6 +130,8 @@ def sendThought():
     
     # get user id and thought
     uid = decoded_token.get("uid")
+    # fetch the actual user using the id
+    user_record = auth.get(uid)
     name = decoded_token.get("name")
     data = request.get_json()
     thought = data.get("thought")
@@ -137,8 +139,8 @@ def sendThought():
     db.thoughts.insert_one({
         "senderID": uid,
         "name": name, 
-        "name2": uid.display_name,
-        "photoUrl": uid.photo_url,
+        "name2": user_record.display_name,
+        "photoUrl": user_record.photo_url,
         "thought": thought,
         "createdAt": datetime.now()
     })
