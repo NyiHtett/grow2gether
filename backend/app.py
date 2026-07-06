@@ -8,7 +8,13 @@ from datetime import datetime
 from flask_cors import CORS
 import firebase_admin
 from firebase_admin import credentials 
+from firebase_admin import auth 
 import os
+import json
+
+firebase_cred = os.environ.get("FIREBASE_CREDENTIALS")
+cred = credentials.Certificate(json.loads(firebase_cred))
+firebase_admin.initialize_app(cred)
 # get database connection link
 from dotenv import load_dotenv
 load_dotenv()
@@ -53,9 +59,10 @@ def createInvite():
     #     return jsonify("user already has an invite link")
     
 #     take the code that is passed in the request and look for the exact code in the invite documents
-@app.route('/api/invite/accept/<code>', methods = ['GET'])
+@app.route('/api/invite/accept/<code>', methods = ['POST'])
 def acceptInvite(code):
     print("accepting the invite")
+    print("self authentication is started")
     auth_header = request.headers.get("Authorization")
     if not auth_header.startswith("Bearer "):
         return jsonify({"error": "Invalid authorization header"}), 401
@@ -69,8 +76,6 @@ def acceptInvite(code):
     
     uid = decoded_token.get("uid")
     
-    print("self authentication is started")
-    uid = request.uid;
     print("self authentication is ended")
     
     print("another person authentication is started")
