@@ -53,7 +53,7 @@ def createInvite():
     #     return jsonify("user already has an invite link")
     
 #     take the code that is passed in the request and look for the exact code in the invite documents
-@app.route('/api/invite/accept/<code>', methods = ['POST'])
+@app.route('/api/invite/accept/<code>', methods = ['GET'])
 def acceptInvite(code):
     print("accepting the invite")
     auth_header = request.headers.get("Authorization")
