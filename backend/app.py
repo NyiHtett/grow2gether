@@ -70,6 +70,14 @@ def createInvite():
     #     print("user already has an invite link")
     #     return jsonify("user already has an invite link")
     
+@app.route('/api/user/<uid>', methods = ['GET'])
+def getUser(uid):
+    result = db.pairs.find_one({"$or": [{"senderID": uid}, {"receiverID": uid}]}, {"_id": 0})
+    print("result is", result)
+    return jsonify({
+        "pairID": result["pairID"] if result else None,
+    })
+    
 #     take the code that is passed in the request and look for the exact code in the invite documents
 @app.route('/api/invite/accept/<code>', methods = ['POST'])
 def acceptInvite(code):

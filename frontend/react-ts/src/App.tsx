@@ -47,7 +47,6 @@ function Router() {
     }
     console.log("user is signed in, connecting socket", user.uid)
     connectSocket(user.uid)
-
     // call the function not right away
     return () => {
       disconnectSocket()
