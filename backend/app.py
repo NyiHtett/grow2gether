@@ -131,7 +131,7 @@ def sendThought():
     # get user id and thought
     uid = decoded_token.get("uid")
     data = request.get_json()
-    thought = data("thought")
+    thought = data.get("thought")
     
     db.thoughts.insert_one({
         "senderID": uid,
