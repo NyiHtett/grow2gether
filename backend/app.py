@@ -56,6 +56,18 @@ def createInvite():
 @app.route('/api/invite/accept/<code>', methods = ['POST'])
 def acceptInvite(code):
     print("accepting the invite")
+    auth_header = request.headers.get("Authorization")
+    if not auth_header.startswith("Bearer "):
+        return jsonify({"error": "Invalid authorization header"}), 401
+    
+    id_token = auth_header.split("Bearer ")[1]
+    
+    try: 
+        decoded_token = firebase_admin.auth.verify_id_token(id_token)
+    except Exception:
+        return jsonify({"error": "Invalid ID token"}), 401
+    
+    uid = decoded_token.get("uid")
     
     print("self authentication is started")
     uid = request.uid;

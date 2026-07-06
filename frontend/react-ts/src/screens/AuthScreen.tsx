@@ -17,19 +17,19 @@ export function RegisterScreen({go, inviteCode}: {go: (r: Route) => void; invite
   const result = await signInWithPopup(auth, provider);
 
   // code for searching the partner
-  if(inviteCode) {
-    const token = result.user.getIdToken;
-    const res = await fetch(`https://grow2gether.onrender.com/api/invite/accept/${inviteCode}`, {
-      "method" : 'POST', 
-      "headers" : {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      }, 
-      "body": JSON.stringify({"uid": auth.currentUser?.uid}) // change for production
-    })
-    const data = await res.json(); 
-    console.log("the two users are paired", data); 
-  }
+  // if(inviteCode) {
+  //   const token = result.user.getIdToken;
+  //   const res = await fetch(`https://grow2gether.onrender.com/api/invite/accept/jfePbN`, {
+  //     "method" : 'POST', 
+  //     "headers" : {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': `Bearer ${token}`,
+  //     }, 
+  //     "body": JSON.stringify({"uid": auth.currentUser?.uid}) // change for production
+  //   })
+  //   const data = await res.json(); 
+  //   console.log("the two users are paired", data); 
+  // }
   go({name: "home"});
   };
   return (
