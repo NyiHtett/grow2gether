@@ -80,6 +80,8 @@ def acceptInvite(code):
     
     print("another person authentication is started")
     anotherPerson = db.invites.find_one({"unique_code": code}, {"_id": 0})
+    if not anotherPerson:
+        return jsonify({"error": "Invalid invite code"}), 400
     anotherPersonUID = anotherPerson["senderID"]
     print(anotherPersonUID)
     print("another person authentication is ended")

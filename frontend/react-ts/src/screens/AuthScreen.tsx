@@ -18,7 +18,7 @@ export function RegisterScreen({go, inviteCode}: {go: (r: Route) => void; invite
 
   // code for searching the partner
   if(inviteCode) {
-    const token = await result.user.getIdToken;
+    const token = await result.user.getIdToken();
     const res = await fetch(`${import.meta.env.VITE_API_URL}/api/invite/accept/${inviteCode}`, {
       "method" : 'POST', 
       "headers" : {
