@@ -14,7 +14,7 @@ export function ThoughtsScreen() {
   }, [thoughts.length]);
 
 
-  const submit = () => {
+  const submit = async () => {
     if (!text.trim()) return;
     console.log("sending thought", text);
     if(user) {
@@ -23,7 +23,9 @@ export function ThoughtsScreen() {
     else {
       console.log("No user is signed in.");
     }
-    //auth.getAuth(); 
+    const result = await fetch(`${import.meta.env.VITE_API_URL}/sendThought/${text}`)
+    const data = await result.json()
+    console.log(data)
     setText("");
   };
 

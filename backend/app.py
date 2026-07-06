@@ -43,7 +43,19 @@ def createInvite():
     # userID = request.json.get("uid")
     # dataForInvite =  db.invites.find_one({"senderID": userID, "isUsed": "false"})
     # if not dataForInvite: 
-        userID = request.json.get("uid")
+        auth_header = request.headers.get("Authorization")
+        if not auth_header.startswith("Bearer "):
+            return jsonify({"error": "Invalid authorization header"}), 401
+    
+        id_token = auth_header.split("Bearer ")[1]
+    
+        try: 
+            decoded_token = firebase_admin.auth.verify_id_token(id_token)
+        except Exception:
+            return jsonify({"error": "Invalid ID token"}), 401
+    
+        userID = decoded_token.get("uid")
+        # userID = request.json.get("uid")
         character_pool = string.ascii_letters + string.digits
         unique_code = "".join(secrets.choice(character_pool) for _ in range(6))
         # client.invite.create()
@@ -101,6 +113,27 @@ def acceptInvite(code):
     })
     return "pair adding is successful"
 
+@app.route('/sendThought/<thought>', methods = ['POST'])
+def sendThought(thought):
+    auth_header = request.headers.get("Authorization")
+    if not auth_header.startswith("Bearer "):
+        return jsonify({"error": "Invalid authorization header"}), 401
+    
+    id_token = auth_header.split("Bearer ")[1]
+    
+    try: 
+        decoded_token = firebase_admin.auth.verify_id_token(id_token)
+    except Exception:
+        return jsonify({"error": "Invalid ID token"}), 401
+    
+    uid = decoded_token.get("uid")
+    
+    db.thoughts.insert_one({
+        "senderID": uid,
+        "thought": thought,
+        "createdAt": datetime.now()
+    })
+    return jsonify({"message": "Thought sent successfully"})
 
 #     # mongoDB doesn't know how to jsonify the _id field, we will exclude it
 #     anotherPersonIndex = db.invites.find_one({"unique_code": code}, {"_id": 0})
