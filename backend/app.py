@@ -113,8 +113,9 @@ def acceptInvite(code):
     })
     return "pair adding is successful"
 
-@app.route('/sendThought/<thought>', methods = ['POST'])
-def sendThought(thought):
+@app.route('/sendThought', methods = ['POST'])
+def sendThought():
+    print("sending thought started")
     auth_header = request.headers.get("Authorization")
     if not auth_header.startswith("Bearer "):
         return jsonify({"error": "Invalid authorization header"}), 401
@@ -122,7 +123,8 @@ def sendThought(thought):
     id_token = auth_header.split("Bearer ")[1]
     
     try: 
-        decoded_token = firebase_admin.auth.verify_id_token(id_token)
+        decoded_token = auth.verify_id_token(id_token)
+        print(decoded_token)
     except Exception:
         return jsonify({"error": "Invalid ID token"}), 401
     
@@ -130,7 +132,7 @@ def sendThought(thought):
     
     db.thoughts.insert_one({
         "senderID": uid,
-        "thought": thought,
+        "thought": request.get_json("thought"),
         "createdAt": datetime.now()
     })
     return jsonify({"message": "Thought sent successfully"})

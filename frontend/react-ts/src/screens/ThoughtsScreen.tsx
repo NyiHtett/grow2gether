@@ -25,12 +25,14 @@ export function ThoughtsScreen() {
     else {
       console.log("No user is signed in.");
     }
-    const result = await fetch(`${import.meta.env.VITE_API_URL}/sendThought/${text}`, {
+
+    const result = await fetch(`${import.meta.env.VITE_API_URL}/sendThought`, {
          "method" : 'POST', 
          "headers" : {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
          },
+         "body" : JSON.stringify({"thought": text})
     })
     const data = await result.json()
     console.log(data)
