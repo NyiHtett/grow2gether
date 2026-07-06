@@ -131,7 +131,7 @@ def sendThought():
     # get user id and thought
     uid = decoded_token.get("uid")
     # fetch the actual user using the id
-    user_record = auth.get(uid)
+    user_record = auth.get_user(uid)
     
     data = request.get_json()
     thought = data.get("thought")
