@@ -26,13 +26,23 @@ export function ThoughtsScreen() {
       console.log("No user is signed in.");
     }
 
+    const userObject = await fetch(`${import.meta.env.VITE_API_URL}/api/user/${user?.uid}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    });
+    const userData = await userObject.json();
+    console.log("User data:", userData);
+
     const result = await fetch(`${import.meta.env.VITE_API_URL}/sendThought`, {
          "method" : 'POST', 
          "headers" : {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
          },
-         "body" : JSON.stringify({"thought": text})
+         "body" : JSON.stringify({"thought": text, "pairID": userData["pairID"]})
     })
     const data = await result.json()
     console.log(data)
