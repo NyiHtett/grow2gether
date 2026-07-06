@@ -126,7 +126,7 @@ def sendThought():
         decoded_token = auth.verify_id_token(id_token)
         print(decoded_token)
     except Exception as e:
-        return jsonify({"error": "Invalid ID token", "message": e}), 401
+        return jsonify({"error": "Invalid ID token", "message": str(e)}), 401
     
     uid = decoded_token.get("uid")
     

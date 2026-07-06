@@ -16,7 +16,7 @@ export function ThoughtsScreen() {
 
   const submit = async () => {
     if (!text.trim()) return;
-    const token = user?.getIdToken();
+    const token = await user?.getIdToken();
     console.log("sending thought", text);
 
     if(user) {
