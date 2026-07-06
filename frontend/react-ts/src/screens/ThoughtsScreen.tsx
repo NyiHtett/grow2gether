@@ -16,14 +16,22 @@ export function ThoughtsScreen() {
 
   const submit = async () => {
     if (!text.trim()) return;
+    const token = user?.getIdToken();
     console.log("sending thought", text);
+
     if(user) {
       console.log("User is signed in:", user.uid);
     }
     else {
       console.log("No user is signed in.");
     }
-    const result = await fetch(`${import.meta.env.VITE_API_URL}/sendThought/${text}`)
+    const result = await fetch(`${import.meta.env.VITE_API_URL}/sendThought/${text}`, {
+         "method" : 'POST', 
+         "headers" : {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+         },
+    })
     const data = await result.json()
     console.log(data)
     setText("");
