@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { AnimatePresence } from "framer-motion";
 import type { Route } from "./types";
 import { AppBar } from "./components/AppBar";
@@ -11,6 +11,7 @@ import { StudyScreen } from "./screens/StudyScreen";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { auth } from "./firebase";
 import InviteScreen from "./screens/InviteScreen";
+import { connectSocket, disconnectSocket } from "./socket";
 
 function Router() {
   const [user, setUser] = useState<User | null> (null); 
@@ -28,13 +29,30 @@ function Router() {
     }
   }, [])
 
+  //separation of concerns: single responsibility principle 
+
   // Not registered yet → force the register screen (no app bar).
+  // for auth concern
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser); 
     })
     return unsubscribe; 
   }, [])
+
+  // for socket concern
+  useEffect(() => {
+    if(!user) {
+      return
+    }
+    console.log("user is signed in, connecting socket", user.uid)
+    connectSocket(user.uid)
+
+    // call the function not right away
+    return () => {
+      disconnectSocket()
+    }
+  }, [user])
 
   if(!user) {
     return (
