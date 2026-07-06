@@ -25,6 +25,7 @@ export function RegisterScreen({go, inviteCode}: {go: (r: Route) => void; invite
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       }, 
+      "body": JSON.stringify({"uid": auth.currentUser?.uid}) // change for production
     })
     const data = await res.json(); 
     console.log("the two users are paired", data); 

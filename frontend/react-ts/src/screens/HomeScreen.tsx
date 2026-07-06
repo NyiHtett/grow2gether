@@ -27,7 +27,7 @@ export function HomeScreen({ go }: { go: (r: Route) => void }) {
       // request invite link from backend (authenticate using the token)
       // method, headers, body(along with current userid)
       const res = await fetch(`${import.meta.env.VITE_API_URL}/api/invite`, {
-        "method": "POST", 
+        "method": "GET", 
         "headers": {
           "Content-Type": "application/json", 
           "Authorization": `Bearer ${token}`, 
