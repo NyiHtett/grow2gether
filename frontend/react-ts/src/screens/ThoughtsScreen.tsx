@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { SendIcon } from "../components/icons";
-import { auth } from "../firebase";   
+import { auth } from "../firebase";
 
 
 export function ThoughtsScreen() {
   const user = auth.currentUser;
-  const thoughts: string[]= []
+  const thoughts: string[] = []
   const [text, setText] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -19,31 +19,38 @@ export function ThoughtsScreen() {
     const token = await user?.getIdToken();
     console.log("sending thought", text);
 
-    if(user) {
+    if (user) {
       console.log("User is signed in:", user.uid);
     }
     else {
       console.log("No user is signed in.");
     }
-
-    console.log("started fetching user's pairID")
-    const userObject = await fetch(`${import.meta.env.VITE_API_URL}/api/user/${user?.uid}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-    });
-    const userData = await userObject.json();
-    console.log("User data:", userData);
-
-    const result = await fetch(`${import.meta.env.VITE_API_URL}/sendThought`, {
-         "method" : 'POST', 
-         "headers" : {
+    
+    let userData: any = null; 
+    try {
+      console.log("started fetching user's pairID")
+      const userObject = await fetch(`${import.meta.env.VITE_API_URL}/api/user/${user?.uid}`, {
+        method: 'GET',
+        headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-         },
-         "body" : JSON.stringify({"thought": text, "pairID": userData["pairID"]})
+          'Authorization': `Bearer ${token}`
+        },
+      });
+      userData = await userObject.json();
+      console.log("User data:", userData);
+
+    }
+    catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+    
+    const result = await fetch(`${import.meta.env.VITE_API_URL}/sendThought`, {
+      "method": 'POST',
+      "headers": {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      "body": JSON.stringify({ "thought": text, "pairID": userData["pairID"] })
     })
     const data = await result.json()
     console.log(data)
