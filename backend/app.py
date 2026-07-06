@@ -128,11 +128,14 @@ def sendThought():
     except Exception as e:
         return jsonify({"error": "Invalid ID token", "message": str(e)}), 401
     
+    # get user id and thought
     uid = decoded_token.get("uid")
+    data = request.get_json()
+    thought = data("thought")
     
     db.thoughts.insert_one({
         "senderID": uid,
-        "thought": request.get_json("thought"),
+        "thought": thought,
         "createdAt": datetime.now()
     })
     return jsonify({"message": "Thought sent successfully"})
