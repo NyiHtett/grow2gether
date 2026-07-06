@@ -26,6 +26,7 @@ export function ThoughtsScreen() {
       console.log("No user is signed in.");
     }
 
+    console.log("started fetching user's pairID")
     const userObject = await fetch(`${import.meta.env.VITE_API_URL}/api/user/${user?.uid}`, {
       method: 'GET',
       headers: {
