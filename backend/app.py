@@ -130,11 +130,15 @@ def sendThought():
     
     # get user id and thought
     uid = decoded_token.get("uid")
+    name = decoded_token.get("name")
     data = request.get_json()
     thought = data.get("thought")
     
     db.thoughts.insert_one({
         "senderID": uid,
+        "name": name, 
+        "name2": uid.display_name,
+        "photoUrl": uid.photo_url,
         "thought": thought,
         "createdAt": datetime.now()
     })
