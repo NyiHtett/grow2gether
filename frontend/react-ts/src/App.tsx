@@ -26,7 +26,6 @@ function Router() {
       console.log(match[1])
       setInviteCode(match[1])
     }
-    
   }, [])
 
   // Not registered yet → force the register screen (no app bar).

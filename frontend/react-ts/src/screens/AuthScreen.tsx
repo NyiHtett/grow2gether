@@ -20,7 +20,7 @@ export function RegisterScreen({go, inviteCode}: {go: (r: Route) => void; invite
   if(inviteCode) {
     const token = result.user.getIdToken;
     const res = await fetch(`https://grow2gether.onrender.com/api/invite/accept/${inviteCode}`, {
-      "method" : 'GET', 
+      "method" : 'POST', 
       "headers" : {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
