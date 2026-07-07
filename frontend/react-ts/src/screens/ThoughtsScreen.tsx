@@ -2,13 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { SendIcon } from "../components/icons";
 import { auth } from "../firebase";
 import { socket } from "../socket";
+import type { Thought } from "@/types";
 // import { motion } from "framer-motion";
 // import { cn } from "@/lib/cn";
 
 
 export function ThoughtsScreen() {
   const user = auth.currentUser;
-  const [thoughts, setThoughts] = useState<string[]>([]);
+  const [thoughts, setThoughts] = useState<Thought[]>([]);
   const [text, setText] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
 

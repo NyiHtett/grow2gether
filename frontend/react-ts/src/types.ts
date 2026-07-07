@@ -3,6 +3,15 @@
 
 export type PersonColor = "rose" | "mint";
 
+export interface Thought {
+  createdAt: string; // ISO date string YYYY-MM-DD HH:mm:ss
+  name: string;
+  pairID: string | null;
+  photoUrl: string;
+  senderID: string;
+  thought: string;
+}
+
 export interface Person {
   id: string;
   name: string;
