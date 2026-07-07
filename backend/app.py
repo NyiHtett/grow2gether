@@ -149,16 +149,22 @@ def sendThought():
     # fetch the actual user using the id
     user_record = auth.get_user(uid)
     
+    user = db.pairs.find_one({"$or": [{"senderID": uid}, {"receiverID": uid}]})
+    pairID = user["pairID"] if user else None
     data = request.get_json()
     thought = data.get("thought")
     
-    db.thoughts.insert_one({
+    new_thought = {
         "senderID": uid,
+        "pairID": pairID,
         "name": user_record.display_name,
         "photoUrl": user_record.photo_url,
         "thought": thought,
         "createdAt": datetime.now()
-    })
+    }
+    
+    db.thoughts.insert_one(new_thought)
+    socket.emit('new_thought', new_thought, broadcast=True)
     return jsonify({"message": "Thought sent successfully"})
 
 #     # mongoDB doesn't know how to jsonify the _id field, we will exclude it
