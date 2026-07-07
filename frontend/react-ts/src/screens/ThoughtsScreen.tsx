@@ -71,7 +71,7 @@ export function ThoughtsScreen() {
     const data = await result.json()
     console.log(data)
     setText("");
-    thoughts.push(text)
+    thoughts.push(data.thought); // Update the thoughts state with the new thought
   };
 
   return (
@@ -101,7 +101,11 @@ export function ThoughtsScreen() {
               //   </p>
               //   <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{text}</p>
               // </motion.div>
-              <p> {t} </p>
+              <>
+              <p> {t.authorName} </p>
+              <p> {t.thought} </p>
+              <p> {t.createdAt} </p>
+              </>
             );
           })
         )}
