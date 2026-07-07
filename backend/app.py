@@ -62,6 +62,7 @@ def createInvite():
         except Exception:
             return jsonify({"error": "Invalid ID token"}), 401
     
+        
         userID = decoded_token.get("uid")
         # userID = request.json.get("uid")
         character_pool = string.ascii_letters + string.digits
@@ -130,6 +131,8 @@ def acceptInvite(code):
     return "pair adding is successful"
 
 @app.route('/sendThought', methods = ['POST'])
+def testing():
+    return "this is testing"
 def sendThought():
     print("sending thought started")
     auth_header = request.headers.get("Authorization")
@@ -165,40 +168,9 @@ def sendThought():
     }
     
     db.thoughts.insert_one(new_thought)
-    socket.emit('new_thought', new_thought, roomID = pairID)
+    socket.emit('new_thought', new_thought, room = pairID)
     return jsonify({"message": "Thought sent successfully"})
 
-#     # mongoDB doesn't know how to jsonify the _id field, we will exclude it
-#     anotherPersonIndex = db.invites.find_one({"unique_code": code}, {"_id": 0})
-#     if anotherPersonIndex: 
-#         return jsonify({"found the code": anotherPersonIndex})
-#     else:
-#         return jsonify({"code not found": code})
-    
-    
-#     # sign in the user
-#     # create a record in the invite 
-    
-# #     once found delete both invite code and replace with mutual unique paired Id 
-# #@app.route('/test/addPairID', methods = ['POST'])
-# def addPairID():
-#     code = code
-#     pairID = generatePairID()
-#     db.invites.update_one({"unique_code": code}, {"$set": {"pairID": pairID,"isUsed": True}} ,upsert = False)
-#     return "the pair is added"
-
-# #     pair them in the pairs collection
-# # @app.route('/test/addPairs', methods = ['POST'])
-# def addPairCollection(): 
-#     db.pairs.insert_one({"user1": "kyaw", "user2": "nyi"})
-#     return "pair adding is successful"
-    
-# #     if there is pairId in their data, there should be image of the other person next to them (frontend)
-# #     and once you look into the pages, you will store the data specifically for you two. 
-
-# # @app.route('/api/invite/<code>', methods = ['GET'])
-# # def getInviteLink(code): 
-    
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 3000))
