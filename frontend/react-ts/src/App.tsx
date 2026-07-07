@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import type { Route } from "./types";
 import { AppBar } from "./components/AppBar";
