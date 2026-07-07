@@ -12,7 +12,7 @@ import { onAuthStateChanged, type User } from "firebase/auth";
 import { auth } from "./firebase";
 import InviteScreen from "./screens/InviteScreen";
 import { connectSocket, disconnectSocket } from "./socket";
-import { socket } from "./socket";
+
 function Router() {
   const [user, setUser] = useState<User | null> (null); 
   const [route, setRoute] = useState<Route>({ name: "home" });

@@ -12,13 +12,20 @@ export function ThoughtsScreen() {
   const [text, setText] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
 
+  
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
+
+    socket?.on('new_thought', (thought) => {
+    setThoughts((prev) => [...prev, thought]);
+    });
+
+    return () => {
+      socket?.off('new_thought')
+    }
   }, [thoughts.length]);
 
-  socket?.on('new_thought', (thought) => {
-    setThoughts((prev) => [...prev, thought]);
-  });
+  
 
   const submit = async () => {
     console.log("submit function called with text:", text);

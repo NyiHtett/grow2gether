@@ -54,13 +54,6 @@ export function RegisterScreen({go, inviteCode}: {go: (r: Route) => void; invite
       >
         Sign In With Google
       </button>
-      <button
-        // this is when the user signs in
-        onClick={()=> {}}
-        className="glass-rose w-full rounded-2xl py-3.5 text-[15px] font-semibold text-white transition active:scale-[0.98] disabled:opacity-40"
-      >
-        Invite other person
-      </button>
     </motion.div>
   );
 }
