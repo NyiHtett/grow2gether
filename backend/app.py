@@ -4,6 +4,7 @@ from xml.dom.xmlbuilder import DocumentLS
 
 from flask import Flask, jsonify, request
 import os, secrets, pymongo, string
+from flask_socketio import SocketIO, emit
 from datetime import datetime
 from flask_cors import CORS
 import firebase_admin
@@ -13,6 +14,7 @@ import os
 import json
 
 firebase_cred = os.environ.get("FIREBASE_SERVICE_ACCOUNT_KEY")
+print("firebase_cred is", firebase_cred)
 cred = credentials.Certificate(json.loads(firebase_cred))
 firebase_admin.initialize_app(cred)
 # get database connection link
@@ -24,6 +26,7 @@ MONGODB_URI = os.environ.get("MONGODB_URI")
 client = pymongo.MongoClient(MONGODB_URI)
 db = client["Grow2gether"]
 app = Flask(__name__)
+socket = SocketIO(app, cors_allowed_origins="*")
 CORS(app, origins=["https://grow2gether-omega.vercel.app", "https://grow2gether.onrender.com", "http://localhost:5173"], supports_credentials=True)
 # path for generating data format 
 # ask firebase for authentication
@@ -32,6 +35,11 @@ CORS(app, origins=["https://grow2gether-omega.vercel.app", "https://grow2gether.
 def generatePairID():
     character_pool = string.ascii_letters + string.digits
     return "".join(secrets.choice(character_pool) for _ in range(20));
+
+@socket.on('connect')
+def handle_connect():
+    user_id = request.args.get("userID")
+    return(user_id, "is connected to the console")
 
 @app.route('/')
 def welcome():
@@ -187,5 +195,5 @@ def sendThought():
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 3000))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    socket.run(app, debug=True, host='0.0.0.0', port=port)
 

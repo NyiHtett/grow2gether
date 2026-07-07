@@ -17,3 +17,4 @@ services:
       - "3000:3000" # PORT 3000 maps to container port 3000
     environment:
       - PORT=3000 # defined for gunicorn
+      - FIREBASE_SERVICE_ACCOUNT_KEY=${FIREBASE_SERVICE_ACCOUNT_KEY} # pass the environment variable to the container

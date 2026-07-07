@@ -4,3 +4,5 @@ pymongo==4.17.0
 flask-cors==6.0.5
 python-dotenv==1.2.1
 firebase_admin==7.5.0
+Flask-SocketIO==5.6.1
+simple-websocket==1.1.0
