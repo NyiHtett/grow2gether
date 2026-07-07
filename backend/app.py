@@ -168,7 +168,7 @@ def sendThought():
     }
     
     db.thoughts.insert_one(new_thought)
-    socket.emit('new_thought', new_thought, room = pairID)
+    socket.emit('new_thought', new_thought["thought"], room = pairID)
     return jsonify({"message": "Thought sent successfully"})
 
 
