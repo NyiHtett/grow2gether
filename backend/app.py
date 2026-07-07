@@ -13,13 +13,15 @@ from firebase_admin import auth
 import os
 import json
 
+# load the environmnet variables before using
+from dotenv import load_dotenv
+load_dotenv()
+
+
 firebase_cred = os.environ.get("FIREBASE_SERVICE_ACCOUNT_KEY")
 print("firebase_cred is", firebase_cred)
 cred = credentials.Certificate(json.loads(firebase_cred))
 firebase_admin.initialize_app(cred)
-# get database connection link
-from dotenv import load_dotenv
-load_dotenv()
 
 # create client to accept the connection
 MONGODB_URI = os.environ.get("MONGODB_URI")

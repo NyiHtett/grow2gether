@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { SendIcon } from "../components/icons";
 import { auth } from "../firebase";
+import { motion } from "framer-motion";
+import { cn } from "@/lib/cn";
 
 
 export function ThoughtsScreen() {
@@ -13,6 +15,9 @@ export function ThoughtsScreen() {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [thoughts.length]);
 
+  useEffect(() => {
+
+  })
 
   const submit = async () => {
     console.log("submit function called with text:", text);
@@ -57,6 +62,7 @@ export function ThoughtsScreen() {
     const data = await result.json()
     console.log(data)
     setText("");
+    thoughts.push(text)
   };
 
   return (
@@ -67,28 +73,27 @@ export function ThoughtsScreen() {
             Things you didn't get to say out loud — leave them here.
           </p>
         ) : (
-          // thoughts.map((t) => {
-          //   const mine = t.authorId === me.id;
-          //   return (
-          //     <motion.div
-          //       key={t.id}
-          //       initial={{ opacity: 0, y: 8 }}
-          //       animate={{ opacity: 1, y: 0 }}
-          //       className={cn(
-          //         "max-w-[85%] rounded-2xl border p-3.5",
-          //         mine
-          //           ? "self-end rounded-br-md border-rose/30 bg-gradient-to-br from-rose/20 to-rose/10"
-          //           : "self-start rounded-bl-md border-mint/30 bg-gradient-to-br from-mint/[0.18] to-mint/[0.08]",
-          //       )}
-          //     >
-          //       <p className="mb-1.5 text-[11px] text-faint">
-          //         {fmtWhen(t.createdAt)} · {t.authorName}
-          //       </p>
-          //       <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{t.text}</p>
-          //     </motion.div>
-          //   );
-          // })
-          <div> </div>
+          thoughts.map((t) => {
+            //const mine = t.authorId === me.id;
+            return (
+              <motion.div
+                //key={t.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                // className={cn(
+                //   "max-w-[85%] rounded-2xl border p-3.5",
+                //   mine
+                //     ? "self-end rounded-br-md border-rose/30 bg-gradient-to-br from-rose/20 to-rose/10"
+                //     : "self-start rounded-bl-md border-mint/30 bg-gradient-to-br from-mint/[0.18] to-mint/[0.08]",
+                // )}
+              >
+                <p className="mb-1.5 text-[11px] text-faint">
+                  {/* {fmtWhen(t.createdAt)} · {t.authorName} */}
+                </p>
+                <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{text}</p>
+              </motion.div>
+            );
+          })
         )}
         <div ref={endRef} />
       </div>
