@@ -150,6 +150,7 @@ def sendThought():
     user_record = auth.get_user(uid)
     
     user = db.pairs.find_one({"$or": [{"senderID": uid}, {"receiverID": uid}]})
+    print("pairID in python is: ", user["pairID"] if user else None)
     pairID = user["pairID"] if user else None
     data = request.get_json()
     thought = data.get("thought")
@@ -164,7 +165,7 @@ def sendThought():
     }
     
     db.thoughts.insert_one(new_thought)
-    socket.emit('new_thought', new_thought, broadcast=True)
+    socket.emit('new_thought', new_thought, roomID = pairID)
     return jsonify({"message": "Thought sent successfully"})
 
 #     # mongoDB doesn't know how to jsonify the _id field, we will exclude it

@@ -12,13 +12,17 @@ import { onAuthStateChanged, type User } from "firebase/auth";
 import { auth } from "./firebase";
 import InviteScreen from "./screens/InviteScreen";
 import { connectSocket, disconnectSocket } from "./socket";
-
+import { socket } from "./socket";
 function Router() {
   const [user, setUser] = useState<User | null> (null); 
   const [route, setRoute] = useState<Route>({ name: "home" });
   const go = (r: Route) => setRoute(r);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
 
+  socket?.on('new_thought', (thought) => {
+    console.log("Received new thought:", thought);
+  });
+  
   // stores the data from the url
   useEffect(() => {
     const path = window.location.pathname;
