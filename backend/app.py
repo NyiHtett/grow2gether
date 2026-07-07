@@ -167,9 +167,10 @@ def sendThought():
         "createdAt": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
     
-    del new_thought["_id"]  # Remove the _id field if it exists
+    
     db.thoughts.insert_one(new_thought)
-    socket.emit('new_thought', new_thought, room = pairID)
+    del new_thought["_id"]  # Remove the _id field if it exists
+    socket.emit('new_thought', new_thought , room = pairID)
     return jsonify({"message": "Thought sent successfully", "thought": new_thought})
 
 
