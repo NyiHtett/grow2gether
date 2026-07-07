@@ -101,11 +101,12 @@ export function ThoughtsScreen() {
               //   </p>
               //   <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{text}</p>
               // </motion.div>
-              <>
-              <p> {t.authorName} </p>
+              <div key={t.createdAt} className="flex flex-col gap-1 rounded-lg border p-3.5">
+              <p> {t.name} </p>
               <p> {t.thought} </p>
               <p> {t.createdAt} </p>
-              </>
+              <img src={t.photoUrl} alt="User photo" className="w-10 h-10 rounded-full" />
+              </div>
             );
           })
         )}

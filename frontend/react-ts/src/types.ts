@@ -39,14 +39,6 @@ export interface StudySession {
   together: boolean;
 }
 
-export interface Thought {
-  id: string;
-  authorId: string;
-  authorName: string;
-  text: string;
-  createdAt: number;
-}
-
 export interface AppData {
   me: Person | null;
   partner: Person | null;
