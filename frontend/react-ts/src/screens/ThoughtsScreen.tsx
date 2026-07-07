@@ -51,7 +51,7 @@ export function ThoughtsScreen() {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      "body": JSON.stringify({ "thought": text, "pairID": userData["pairID"] })
+      "body": JSON.stringify({ "thought": text})
     })
     const data = await result.json()
     console.log(data)
