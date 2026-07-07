@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { SendIcon } from "../components/icons";
 import { auth } from "../firebase";
-import { motion } from "framer-motion";
-import { cn } from "@/lib/cn";
+// import { motion } from "framer-motion";
+// import { cn } from "@/lib/cn";
 
 
 export function ThoughtsScreen() {
@@ -92,7 +92,7 @@ export function ThoughtsScreen() {
               //   </p>
               //   <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{text}</p>
               // </motion.div>
-              <p> {text} </p>
+              <p> {t} </p>
             );
           })
         )}
