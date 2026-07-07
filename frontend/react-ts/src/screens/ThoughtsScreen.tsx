@@ -85,7 +85,7 @@ export function ThoughtsScreen() {
           thoughts.map((t) => {
             //const mine = t.authorId === me.id;
             return (
-              // <motion.div
+              // <motion.divg
               //   //key={t.id}
               //   initial={{ opacity: 0, y: 8 }}
               //   animate={{ opacity: 1, y: 0 }}
