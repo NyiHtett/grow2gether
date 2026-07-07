@@ -164,7 +164,7 @@ def sendThought():
         "name": user_record.display_name,
         "photoUrl": user_record.photo_url,
         "thought": thought,
-        "createdAt": datetime.now()
+        "createdAt": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
     
     db.thoughts.insert_one(new_thought)
