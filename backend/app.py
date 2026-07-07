@@ -131,8 +131,6 @@ def acceptInvite(code):
     return "pair adding is successful"
 
 @app.route('/sendThought', methods = ['POST'])
-def testing():
-    return "this is testing"
 def sendThought():
     print("sending thought started")
     auth_header = request.headers.get("Authorization")
