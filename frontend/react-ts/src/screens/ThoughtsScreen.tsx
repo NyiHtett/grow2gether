@@ -76,22 +76,23 @@ export function ThoughtsScreen() {
           thoughts.map((t) => {
             //const mine = t.authorId === me.id;
             return (
-              <motion.div
-                //key={t.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                // className={cn(
-                //   "max-w-[85%] rounded-2xl border p-3.5",
-                //   mine
-                //     ? "self-end rounded-br-md border-rose/30 bg-gradient-to-br from-rose/20 to-rose/10"
-                //     : "self-start rounded-bl-md border-mint/30 bg-gradient-to-br from-mint/[0.18] to-mint/[0.08]",
-                // )}
-              >
-                <p className="mb-1.5 text-[11px] text-faint">
-                  {/* {fmtWhen(t.createdAt)} · {t.authorName} */}
-                </p>
-                <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{text}</p>
-              </motion.div>
+              // <motion.div
+              //   //key={t.id}
+              //   initial={{ opacity: 0, y: 8 }}
+              //   animate={{ opacity: 1, y: 0 }}
+              //   // className={cn(
+              //   //   "max-w-[85%] rounded-2xl border p-3.5",
+              //   //   mine
+              //   //     ? "self-end rounded-br-md border-rose/30 bg-gradient-to-br from-rose/20 to-rose/10"
+              //   //     : "self-start rounded-bl-md border-mint/30 bg-gradient-to-br from-mint/[0.18] to-mint/[0.08]",
+              //   // )}
+              // >
+              //   <p className="mb-1.5 text-[11px] text-faint">
+              //     {/* {fmtWhen(t.createdAt)} · {t.authorName} */}
+              //   </p>
+              //   <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{text}</p>
+              // </motion.div>
+              <p> {text} </p>
             );
           })
         )}
