@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { SendIcon } from "../components/icons";
 import { auth } from "../firebase";
+import { socket } from "../socket";
 // import { motion } from "framer-motion";
 // import { cn } from "@/lib/cn";
 
 
 export function ThoughtsScreen() {
   const user = auth.currentUser;
-  const thoughts: string[] = []
+  const [thoughts, setThoughts] = useState<string[]>([]);
   const [text, setText] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -15,9 +16,9 @@ export function ThoughtsScreen() {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [thoughts.length]);
 
-  useEffect(() => {
-
-  })
+  socket?.on('new_thought', (thought) => {
+    setThoughts((prev) => [...prev, thought]);
+  });
 
   const submit = async () => {
     console.log("submit function called with text:", text);

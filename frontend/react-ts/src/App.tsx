@@ -19,9 +19,7 @@ function Router() {
   const go = (r: Route) => setRoute(r);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
 
-  socket?.on('new_thought', (thought) => {
-    console.log("Received new thought:", thought);
-  });
+  
   
   // stores the data from the url
   useEffect(() => {
