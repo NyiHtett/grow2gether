@@ -21,10 +21,30 @@ export function ThoughtsScreen() {
     setThoughts((prev) => [...prev, thought]);
     });
 
+    const fetchThoughts = async () => {
+      try {
+        const user_data = await auth.currentUser?.getIdToken();
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/getThoughts`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user_data}`,
+          },
+        });
+        const data = await response.json();
+        for (const thought of data.thoughts) {
+          setThoughts((prev) => [...prev, thought]);
+        } } catch (error) {
+        console.error("Error fetching thoughts:", error);
+      }
+    }
+
+    fetchThoughts();
+
     return () => {
       socket?.off('new_thought')
     }
-  }, [thoughts.length]);
+  }, []);
 
   
 

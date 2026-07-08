@@ -173,6 +173,28 @@ def sendThought():
     socket.emit('new_thought', new_thought , room = pairID)
     return jsonify({"message": "Thought sent successfully", "thought": new_thought})
 
+@app.route('/getThoughts', methods = ['GET'])
+def getThoughts():
+    auth_header = request.headers.get("Authorization")
+    if not auth_header.startswith("Bearer "):
+        return jsonify({"error": "Invalid authorization header"}), 401
+    
+    id_token = auth_header.split("Bearer ")[1]
+    
+    try: 
+        decoded_token = auth.verify_id_token(id_token)
+        print(decoded_token)
+    except Exception as e:
+        return jsonify({"error": "Invalid ID token", "message": str(e)}), 401
+    
+    # get user id and thought
+    uid = decoded_token.get("uid")
+    pairID = decoded_token.get("pairID")
+    
+    thoughts = list(db.thoughts.find({"pairID": pairID}, {"_id": 0}).sort("createdAt", pymongo.DESCENDING))
+    return jsonify(thoughts)
+
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 3000))
