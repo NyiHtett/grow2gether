@@ -11,7 +11,7 @@ const FEATURES: {
   Icon: ComponentType<SVGProps<SVGSVGElement>>;
 }[] = [
   { route: "photos", label: "Photo Dump", Icon: CameraIcon },
-  // { route: "study", label: "Study", Icon: BookIcon },
+  { route: "study", label: "Study", Icon: BookIcon },
   { route: "thoughts", label: "Something I didn't say", Icon: BrainIcon },
 ];
 
