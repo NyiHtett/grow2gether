@@ -32,6 +32,7 @@ export function ThoughtsScreen() {
           },
         });
         const data = await response.json();
+        console.log
         for (const thought of data.thoughts) {
           setThoughts((prev) => [...prev, thought]);
         } } catch (error) {
