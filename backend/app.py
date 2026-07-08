@@ -189,10 +189,8 @@ def getThoughts():
     
     # get user id and thought
     uid = decoded_token.get("uid")
-    
     user = db.pairs.find_one({"$or": [{"senderID": uid}, {"receiverID": uid}]})
     pairID = user["pairID"] if user else None
-    
     thoughts = list(db.thoughts.find({"pairID": pairID}, {"_id": 0}).sort("createdAt", pymongo.ASCENDING))
     return jsonify(thoughts)
 
