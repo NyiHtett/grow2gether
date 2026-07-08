@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { CameraIcon, BookIcon, BrainIcon } from "../components/icons";
+import { CameraIcon, BrainIcon } from "../components/icons";
+//import { BookIcon } from "../components/icons";
 import type { Route } from "../types";
 import type { ComponentType, SVGProps } from "react";
 import { auth } from "@/firebase";
@@ -11,7 +12,7 @@ const FEATURES: {
   Icon: ComponentType<SVGProps<SVGSVGElement>>;
 }[] = [
   { route: "photos", label: "Photo Dump", Icon: CameraIcon },
-  { route: "study", label: "Study", Icon: BookIcon },
+  //{ route: "study", label: "Study", Icon: BookIcon },
   { route: "thoughts", label: "Something I didn't say", Icon: BrainIcon },
 ];
 
