@@ -32,8 +32,8 @@ export function ThoughtsScreen() {
           },
         });
         const data = await response.json();
-        console.log("Fetched thoughts:", data.thoughts);
-        setThoughts(data.thoughts);
+        console.log("Fetched thoughts:", data);
+        setThoughts(data);
       }
       catch (error) {
         console.error("Error fetching thoughts:", error);
