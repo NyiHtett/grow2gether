@@ -11,7 +11,7 @@ const FEATURES: {
   Icon: ComponentType<SVGProps<SVGSVGElement>>;
 }[] = [
   { route: "photos", label: "Photo Dump", Icon: CameraIcon },
-  { route: "study", label: "Study", Icon: BookIcon },
+  // { route: "study", label: "Study", Icon: BookIcon },
   { route: "thoughts", label: "Something I didn't say", Icon: BrainIcon },
 ];
 
@@ -42,7 +42,7 @@ export function HomeScreen({ go }: { go: (r: Route) => void }) {
     }
   return (
     <div className="flex flex-1 flex-col px-[18px] pb-8">
-      <div className="mt-2 grid grid-cols-3 gap-3">
+      <div className="mt-2 grid grid-cols-2 gap-3">
         {FEATURES.map(({ route, label, Icon }, i) => (
           <motion.button
             key={route}

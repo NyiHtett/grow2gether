@@ -104,29 +104,28 @@ export function ThoughtsScreen() {
           </p>
         ) : (
           thoughts.map((t) => {
-            //const mine = t.authorId === me.id;
             return (
-              // <motion.divg
-              //   //key={t.id}
-              //   initial={{ opacity: 0, y: 8 }}
-              //   animate={{ opacity: 1, y: 0 }}
-              //   // className={cn(
-              //   //   "max-w-[85%] rounded-2xl border p-3.5",
-              //   //   mine
-              //   //     ? "self-end rounded-br-md border-rose/30 bg-gradient-to-br from-rose/20 to-rose/10"
-              //   //     : "self-start rounded-bl-md border-mint/30 bg-gradient-to-br from-mint/[0.18] to-mint/[0.08]",
-              //   // )}
-              // >
-              //   <p className="mb-1.5 text-[11px] text-faint">
-              //     {/* {fmtWhen(t.createdAt)} · {t.authorName} */}
-              //   </p>
-              //   <p className="whitespace-pre-wrap text-[15px] leading-relaxed">{text}</p>
-              // </motion.div>
-              <div key={t.createdAt} className="flex flex-col gap-1 rounded-lg border p-3.5">
-              <p> {t.name} </p>
-              <p> {t.thought} </p>
-              <p> {t.createdAt} </p>
-              <img src={t.photoUrl} alt="User photo" className="w-10 h-10 rounded-full" />
+              
+              <div key={t.createdAt} className="flex flex-col gap-3 rounded-lg border p-3.5 border-white/15 bg-black/25 m-3">
+              
+              <div className="flex items-end gap-2.5 text-sm text-faint">
+                
+              {/* <span> {t.name} </span> */}
+              <span> {new Date().toLocaleString([], {
+                year: 'numeric',
+                month: 'long',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+              })} </span>
+              </div>
+              <span className=""> {t.thought} </span>
+              
+
+              
+              <div className="flex justify-end">
+              <img src={t.photoUrl} alt="User photo" className="w-10 h-10 rounded-full " />
+              </div>
               </div>
             );
           })
