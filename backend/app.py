@@ -189,6 +189,7 @@ def getThoughts():
     
     # get user id and thought
     uid = decoded_token.get("uid")
+    
     pairID = decoded_token.get("pairID")
     
     thoughts = list(db.thoughts.find({"pairID": pairID}, {"_id": 0}).sort("createdAt", pymongo.DESCENDING))
