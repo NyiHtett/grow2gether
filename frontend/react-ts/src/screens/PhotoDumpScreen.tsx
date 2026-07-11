@@ -5,7 +5,7 @@ import { CameraIcon, ChevronLeft, ChevronRight, CloseIcon } from "../components/
 import { ImageSwiper } from "@/components/ui/image-swiper";
 import type { Photo } from "../types";
 import { cn } from "../lib/cn";
-
+import { auth } from "@/firebase";
 const WEEKDAYS = ["S", "M", "T", "W", "T", "F", "S"];
 const MONTHS = [
   "January", "February", "March", "April", "May", "June",
@@ -23,8 +23,9 @@ export function PhotoDumpScreen() {
   const [month, setMonth] = useState(now.getMonth());
   const [cameraDate, setCameraDate] = useState<string | null>(null);
   const [viewerDate, setViewerDate] = useState<string | null>(null);
-
   const todayIso = iso(now.getFullYear(), now.getMonth(), now.getDate());
+
+  
 
   // map date -> photos that day
   const byDate = useMemo(() => {
@@ -36,6 +37,20 @@ export function PhotoDumpScreen() {
     }
     return map;
   }, [photos]);
+
+  const sendImageViaFlask = async (formData: FormData) => {
+    const token = await auth.currentUser?.getIdToken(); 
+    const data = await fetch(`${import.meta.env.VITE_API_URL}/api/sendImage`, {
+      method: 'GET', 
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      //body: formData
+    })
+
+    const response = data.json()
+    console.log(response);
+  }
 
   const firstWeekday = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -124,9 +139,15 @@ export function PhotoDumpScreen() {
           <CameraSheet
             date={cameraDate}
             onClose={() => setCameraDate(null)}
-            onCapture={(dataUrl, caption) => {
+            onCapture={(blob, caption) => {
               //addPhoto(dataUrl, cameraDate, caption);
-              console.log(dataUrl, caption)
+              const formData = new FormData();
+              formData.append("image", blob, "myfile.jpeg")
+              formData.append("date", cameraDate)
+              if (caption) {
+                formData.append("caption", caption)
+              }
+              sendImageViaFlask(formData)
               setCameraDate(null);
             }}
           />
@@ -222,16 +243,22 @@ function CameraSheet({
 }: {
   date: string;
   onClose: () => void;
-  onCapture: (dataUrl: string, caption?: string) => void;
+  onCapture: (blob: Blob, caption?: string) => void;
 }) {
   const webcamRef = useRef<Webcam>(null);
-  const [shot, setShot] = useState<string | null>(null);
+  const [shot, setShot] = useState< Blob | null>(null);  // this is where I attach the image
   const [caption, setCaption] = useState("");
   const [err, setErr] = useState(false);
 
-  const capture = useCallback(() => {
+  // setShot updates only after the end of the function
+  const capture = useCallback(async () => {
     const img = webcamRef.current?.getScreenshot();
-    if (img) setShot(img);
+    if (!img )return;
+    const blob = await(await fetch(img)).blob()
+    if(!img) return; 
+    setShot(blob); 
+    
+    console.log(blob)
   }, []);
 
   const pretty = new Date(date + "T00:00:00").toLocaleDateString(undefined, {
@@ -263,8 +290,9 @@ function CameraSheet({
           </button>
         </div>
 
+        
         {shot ? (
-          <img src={shot} alt="preview" className="aspect-[3/4] w-full rounded-2xl object-cover" />
+          <img src={URL.createObjectURL(shot)} alt="preview" className="aspect-[3/4] w-full rounded-2xl object-cover" />
         ) : err ? (
           <div className="grid aspect-[3/4] w-full place-items-center rounded-2xl bg-black/60 px-6 text-center text-sm text-muted">
             Camera unavailable. Allow camera access in your browser to add photos.
