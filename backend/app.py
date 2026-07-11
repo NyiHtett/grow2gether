@@ -1,8 +1,10 @@
 from cmd import IDENTCHARS
+from sqlite3 import Date
 from tarfile import data_filter
 from xml.dom.xmlbuilder import DocumentLS
 
 import cloudinary
+import datetime
 import cloudinary.uploader
 from flask import Flask, jsonify, request
 import os, secrets, pymongo, string
@@ -198,11 +200,35 @@ def getThoughts():
 
 @app.route("/api/sendImage", methods=["POST"])
 def uploadImage(): 
+    auth_header = request.headers.get("authorization")
+    if not (auth_header.startswith("Bearer")):
+        return "Authorization invalid"
+    
+    token = auth_header.split(" ")[1]
+    try:
+        decoded_token = auth.verify_id_token(token)
+    except Exception as e: 
+        return jsonify({"error": "User cannot be authorized", "message": str(e)}), 401
+    
+    user_id = decoded_token.get("uid")
+    user = db.pairs.find({
+        "$or" [
+            {"senderID": user_id}, {"receiverID": user_id}
+        ]
+    })
+    if not user:
+        return "no pairs found"
+    pairID = user["pairID"]
     content = request.files.get("image")
     caption = request.form.get("caption")
     print("caption is", caption)
     
     upload_result = cloudinary.uploader.upload(content)
+    db.photos.insert_one({
+        "pairID": pairID,
+        "createdAt": datetime.now,
+        "url": upload_result['secure_url'],
+    })
     return jsonify({"caption": caption, "content-type": content.content_type, "filename": content.filename, "urlImage": upload_result["secure_url"]})
 
 if __name__ == '__main__':
