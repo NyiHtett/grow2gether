@@ -199,7 +199,7 @@ def uploadImage():
     content = request.files.get("image")
     caption = request.form.get("caption")
     print("caption is", caption)
-    return jsonify({"caption": caption})
+    return jsonify({"caption": caption, "content-type": content.content_type, "filename": content.filename})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 3000))
