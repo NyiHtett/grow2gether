@@ -235,7 +235,7 @@ def uploadImage():
 @app.route('/api/fetchPhotosForPair/<pairID>', methods= ['GET'])
 def fetchPhotosForPair(pairID): 
     photos = db.photos.find({"pairID": pairID}, {"_id": 0}).sort("createdAt", pymongo.DESCENDING)
-    return jsonify(photos)
+    return jsonify(list(photo["url"] for photo in photos))
 
 
 if __name__ == '__main__':
