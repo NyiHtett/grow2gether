@@ -232,6 +232,12 @@ def uploadImage():
     })
     return jsonify({"caption": caption, "content-type": content.content_type, "filename": content.filename, "urlImage": upload_result["secure_url"]})
 
+@app.route('/api/fetchPhotosForPair/<pairID>', methods= ['GET'])
+def fetchPhotosForPair(pairID): 
+    photos = db.photos.find(pairID)
+    return jsonify(photos)
+
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 3000))
     socket.run(app, debug=True, host='0.0.0.0', port=port)

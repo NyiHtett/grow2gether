@@ -69,6 +69,7 @@ export function PhotoDumpScreen() {
   };
 
   return (
+    <>
     <div className="flex flex-1 flex-col px-[18px] pb-8">
       {/* month header */}
       <div className="my-3 flex items-center justify-between">
@@ -166,6 +167,14 @@ export function PhotoDumpScreen() {
         )}
       </AnimatePresence>
     </div>
+
+    
+    {/* this is the testing ground */}
+    
+    <div> List of Photos </div>
+
+    {/* this is the end of the testing ground */}
+    </>
   );
 }
 
@@ -275,6 +284,7 @@ function CameraSheet({
       exit={{ opacity: 0 }}
       onClick={onClose}
     >
+      
       <motion.div
         className="w-full max-w-[480px] rounded-t-3xl border border-white/10 bg-ink-1 px-[18px] pb-7 pt-4.5"
         initial={{ y: "100%" }}
@@ -288,6 +298,7 @@ function CameraSheet({
           <button onClick={onClose} className="text-muted active:text-cream">
             <CloseIcon width={22} height={22} />
           </button>
+          
         </div>
 
         
@@ -343,8 +354,13 @@ function CameraSheet({
               Capture
             </button>
           )}
+          
         </div>
+
+        
       </motion.div>
+      
     </motion.div>
+    
   );
 }
