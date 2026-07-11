@@ -239,7 +239,7 @@ def fetchPhotosForPair(pairID):
 
 @app.route('/api/fetchPhotosViaDate/<date>', methods = ['GET'])
 def searchViaDate(date):
-    result = list(db.photos.find({"createdAt": date}, {"_id": 0})).sort("createdAt", pymongo.DESCENDING)
+    result = list(db.photos.find({"createdAt": date}, {"_id": 0}).sort("createdAt", pymongo.DESCENDING))
     return jsonify (result)
 
 if __name__ == '__main__':
