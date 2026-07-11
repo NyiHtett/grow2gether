@@ -2,6 +2,8 @@ from cmd import IDENTCHARS
 from tarfile import data_filter
 from xml.dom.xmlbuilder import DocumentLS
 
+import cloudinary
+import cloudinary.uploader
 from flask import Flask, jsonify, request
 import os, secrets, pymongo, string
 from flask_socketio import SocketIO, emit
@@ -199,7 +201,9 @@ def uploadImage():
     content = request.files.get("image")
     caption = request.form.get("caption")
     print("caption is", caption)
-    return jsonify({"caption": caption, "content-type": content.content_type, "filename": content.filename})
+    
+    upload_result = cloudinary.uploader.upload(content)
+    return jsonify({"caption": caption, "content-type": content.content_type, "filename": content.filename, "urlImage": upload_result["secure_url"]})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 3000))
