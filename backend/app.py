@@ -232,6 +232,7 @@ def uploadImage():
     })
     return jsonify({"caption": caption, "content-type": content.content_type, "filename": content.filename, "urlImage": upload_result["secure_url"]})
 
+# find via pairID and date and return the list of photos
 @app.route('/api/fetchPhotosForPair/<pairID>', methods= ['GET'])
 def fetchPhotosForPair(pairID): 
     photos = db.photos.find({"pairID": pairID}, {"_id": 0}).sort("createdAt", pymongo.DESCENDING)
@@ -239,8 +240,8 @@ def fetchPhotosForPair(pairID):
 
 @app.route('/api/fetchPhotosViaDate/<date>', methods = ['GET'])
 def searchViaDate(date):
-    result = list(db.photos.find({"createdAt": date}, {"_id": 0}).sort("createdAt", pymongo.DESCENDING))
-    return jsonify (result)
+    result = db.photos.find({"createdAt": date}, {"_id": 0}).sort("createdAt", pymongo.DESCENDING)
+    return jsonify(list(photo["url"] for photo in result))
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 3000))
