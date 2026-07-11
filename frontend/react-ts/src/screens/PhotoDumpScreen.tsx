@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, useCallback } from "react";
+import { useMemo, useRef, useState, useCallback, useEffect, type Key } from "react";
 import Webcam from "react-webcam";
 import { AnimatePresence, motion } from "framer-motion";
 import { CameraIcon, ChevronLeft, ChevronRight, CloseIcon } from "../components/icons";
@@ -6,6 +6,7 @@ import { ImageSwiper } from "@/components/ui/image-swiper";
 import type { Photo } from "../types";
 import { cn } from "../lib/cn";
 import { auth } from "@/firebase";
+//import type { Url } from "url";
 const WEEKDAYS = ["S", "M", "T", "W", "T", "F", "S"];
 const MONTHS = [
   "January", "February", "March", "April", "May", "June",
@@ -23,9 +24,20 @@ export function PhotoDumpScreen() {
   const [month, setMonth] = useState(now.getMonth());
   const [cameraDate, setCameraDate] = useState<string | null>(null);
   const [viewerDate, setViewerDate] = useState<string | null>(null);
+  const [photosResponse, setPhotosResponse] = useState<string[] | null >(null)
   const todayIso = iso(now.getFullYear(), now.getMonth(), now.getDate());
 
   
+  useEffect(() => {
+    const loadPhotos = async () => {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/fetchPhotosForPair/ezfTeAC1wfpDGBkXYPwC`)
+      const data = res.json()
+      setPhotosResponse(await data)
+      console.log(data)
+      
+    }
+    loadPhotos()
+  }, [])
 
   // map date -> photos that day
   const byDate = useMemo(() => {
@@ -170,9 +182,15 @@ export function PhotoDumpScreen() {
 
     
     {/* this is the testing ground */}
-    
+    <>
     <div> List of Photos </div>
-
+    
+    <div>
+      {photosResponse?.map(x => (
+        <img src={x} />
+      ))}
+    </div>
+     </>
     {/* this is the end of the testing ground */}
     </>
   );
