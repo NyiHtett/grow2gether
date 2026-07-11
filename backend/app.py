@@ -227,7 +227,7 @@ def uploadImage():
     upload_result = cloudinary.uploader.upload(content)
     db.photos.insert_one({
         "pairID": pairID,
-        "createdAt": datetime.now(),
+        "createdAt": datetime.now().strftime("%Y-%m-%d"),
         "url": upload_result["secure_url"],
     })
     return jsonify({"caption": caption, "content-type": content.content_type, "filename": content.filename, "urlImage": upload_result["secure_url"]})
@@ -237,6 +237,10 @@ def fetchPhotosForPair(pairID):
     photos = db.photos.find({"pairID": pairID}, {"_id": 0}).sort("createdAt", pymongo.DESCENDING)
     return jsonify(list(photo["url"] for photo in photos))
 
+@app.route('/api/fetchPhotosViaDate/<date>', methods = ['GET'])
+def searchViaDate(date):
+    result = list(db.photos.find({"createdAt": date}, {"_id": 0})).sort("createdAt", pymongo.DESCENDING)
+    return jsonify (result)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 3000))

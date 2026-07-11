@@ -187,7 +187,7 @@ export function PhotoDumpScreen() {
     
     <div>
       {photosResponse?.map(x => (
-        <img src={x} />
+        <img src={x} key={x} />
       ))}
     </div>
      </>
@@ -214,7 +214,11 @@ function ViewerSheet({
   photos: Photo[];
   onClose: () => void;
   onAdd: () => void;
-}) {
+}) 
+  
+
+{
+  
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/75 backdrop-blur-sm"
@@ -284,7 +288,10 @@ function CameraSheet({
     const blob = await(await fetch(img)).blob()
     if(!img) return; 
     setShot(blob); 
-    
+    console.log(date)
+
+    const checkedBlobs = await fetch(`${import.meta.env.VITE_API_URL}/api/fetchPhotosViaDate/${date}`)
+    console.log("checked Blogs", checkedBlobs)
     console.log(blob)
   }, []);
 

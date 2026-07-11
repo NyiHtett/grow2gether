@@ -45,7 +45,7 @@ export function ThoughtsScreen() {
     return () => {
       socket?.off('new_thought')
     }
-  }, []);
+  }, [thoughts]);
 
   
 
