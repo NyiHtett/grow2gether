@@ -41,11 +41,11 @@ export function PhotoDumpScreen() {
   const sendImageViaFlask = async (formData: FormData) => {
     const token = await auth.currentUser?.getIdToken(); 
     const data = await fetch(`${import.meta.env.VITE_API_URL}/api/sendImage`, {
-      method: 'GET', 
+      method: 'POST', 
       headers: {
         'Authorization': `Bearer ${token}`
       },
-      //body: formData
+      body: formData
     })
 
     const response = data.json()

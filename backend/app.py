@@ -194,12 +194,12 @@ def getThoughts():
     thoughts = list(db.thoughts.find({"pairID": pairID}, {"_id": 0}).sort("createdAt", pymongo.ASCENDING))
     return jsonify(thoughts)
 
-@app.route("/api/sendImage", methods=["GET"])
+@app.route("/api/sendImage", methods=["POST"])
 def uploadImage(): 
     content = request.files.get("image")
     caption = request.form.get("caption")
     print("caption is", caption)
-    return "haha"
+    return jsonify({"caption": caption})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 3000))
