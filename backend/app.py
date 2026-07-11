@@ -227,7 +227,7 @@ def uploadImage():
     upload_result = cloudinary.uploader.upload(content)
     db.photos.insert_one({
         "pairID": pairID,
-        "createdAt": datetime.now,
+        "createdAt": datetime.now(),
         "url": upload_result["secure_url"],
     })
     return jsonify({"caption": caption, "content-type": content.content_type, "filename": content.filename, "urlImage": upload_result["secure_url"]})
