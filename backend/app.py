@@ -211,8 +211,9 @@ def uploadImage():
         return jsonify({"error": "User cannot be authorized", "message": str(e)}), 401
     
     user_id = decoded_token.get("uid")
-    user = db.pairs.find({
-        "$or" [
+    user = db.pairs.find_one({
+        # or is key and the list after is the dictionary
+        "$or" : [
             {"senderID": user_id}, {"receiverID": user_id}
         ]
     })
@@ -227,7 +228,7 @@ def uploadImage():
     db.photos.insert_one({
         "pairID": pairID,
         "createdAt": datetime.now,
-        "url": upload_result['secure_url'],
+        "url": upload_result["secure_url"],
     })
     return jsonify({"caption": caption, "content-type": content.content_type, "filename": content.filename, "urlImage": upload_result["secure_url"]})
 
