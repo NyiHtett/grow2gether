@@ -182,7 +182,7 @@ export function PhotoDumpScreen() {
 
     
     {/* this is the testing ground */}
-    <>
+    {/* <>
     <div> List of Photos </div>
     
     <div>
@@ -190,7 +190,7 @@ export function PhotoDumpScreen() {
         <img src={x} key={x} />
       ))}
     </div>
-     </>
+     </> */}
     {/* this is the end of the testing ground */}
     </>
   );
@@ -280,6 +280,18 @@ function CameraSheet({
   const [shot, setShot] = useState< Blob | null>(null);  // this is where I attach the image
   const [caption, setCaption] = useState("");
   const [err, setErr] = useState(false);
+  const [photoUrls, setPhotoUrls] = useState<string[]>([]); // state to hold the list of photo URLs
+
+  useEffect(() => {
+    async function checkPhotosOnDate(date: string) {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/fetchPhotosViaDate/${date}`)
+      const data = await res.json()
+      console.log("checked Blogs", data)
+      setPhotoUrls(data) // update the state with the fetched photo URLs
+    }
+
+    checkPhotosOnDate(date);
+  }, [date]);
 
   // setShot updates only after the end of the function
   const capture = useCallback(async () => {
@@ -290,9 +302,9 @@ function CameraSheet({
     setShot(blob); 
     console.log(date)
 
-    const checkedBlobs = await fetch(`${import.meta.env.VITE_API_URL}/api/fetchPhotosViaDate/${date}`)
-    console.log("checked Blogs", checkedBlobs)
-    console.log(blob)
+    // const checkedBlobs = await fetch(`${import.meta.env.VITE_API_URL}/api/fetchPhotosViaDate/${date}`)
+    // console.log("checked Blogs", checkedBlobs)
+    // console.log(blob)
   }, []);
 
   const pretty = new Date(date + "T00:00:00").toLocaleDateString(undefined, {
@@ -334,6 +346,12 @@ function CameraSheet({
             Camera unavailable. Allow camera access in your browser to add photos.
           </div>
         ) : (
+          <>
+          <div className="flex flex-row">
+          {photoUrls.map((url, index) => (
+            <img src={url} key={index}/> 
+          ))}
+          </div>
           <Webcam
             ref={webcamRef}
             audio={false}
@@ -343,6 +361,7 @@ function CameraSheet({
             onUserMediaError={() => setErr(true)}
             className="aspect-[3/4] w-full rounded-2xl object-cover"
           />
+          </>
         )}
 
         {shot && (
