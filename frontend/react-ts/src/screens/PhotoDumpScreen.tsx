@@ -27,29 +27,18 @@ export function PhotoDumpScreen() {
   const [photosResponse, setPhotosResponse] = useState<string[] | null >(null)
   const todayIso = iso(now.getFullYear(), now.getMonth(), now.getDate());
 
-  
-  useEffect(() => {
-    const loadPhotos = async () => {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/fetchPhotosForPair/ezfTeAC1wfpDGBkXYPwC`)
-      const data = res.json()
-      setPhotosResponse(await data)
-      console.log(data)
-      
-    }
-    loadPhotos()
-  }, [])
+  // fetching all the photos of the pairs (testing)
+  // useEffect(() => {
+  //   const loadPhotos = async () => {
+  //     const res = await fetch(`${import.meta.env.VITE_API_URL}/api/fetchPhotosForPair/ezfTeAC1wfpDGBkXYPwC`)
+  //     const data = res.json()
+  //     setPhotosResponse(await data)
+  //     console.log(data)
+  //   }
+  //   loadPhotos()
+  // }, [])
 
-  // map date -> photos that day
-  const byDate = useMemo(() => {
-    const map = new Map<string, typeof photos>();
-    for (const p of photos) {
-      const arr = map.get(p.date) ?? [];
-      arr.push(p);
-      map.set(p.date, arr);
-    }
-    return map;
-  }, [photos]);
-
+  // uploading an image
   const sendImageViaFlask = async (formData: FormData) => {
     const token = await auth.currentUser?.getIdToken(); 
     const data = await fetch(`${import.meta.env.VITE_API_URL}/api/sendImage`, {
@@ -71,6 +60,7 @@ export function PhotoDumpScreen() {
     ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
   ];
 
+  // for displaying the next and previous month
   const shift = (delta: number) => {
     let m = month + delta;
     let y = year;
@@ -79,6 +69,8 @@ export function PhotoDumpScreen() {
     setMonth(m);
     setYear(y);
   };
+
+  
 
   return (
     <>
@@ -108,25 +100,27 @@ export function PhotoDumpScreen() {
         {cells.map((day, i) => {
           if (day === null) return <div key={i} className="aspect-square" />;
           const date = iso(year, month, day);
-          const dayPhotos = byDate.get(date);
-          const cover = dayPhotos?.[0];
+          // const dayPhotos = byDate.get(date);
+          //checkPhotosOnDate(date); // Call the function to check photos for this date
+          const cover = photosResponse?.[0];
           return (
             <button
               key={i}
-              onClick={() => (dayPhotos?.length ? setViewerDate(date) : setCameraDate(date))}
+              onClick={() => setViewerDate(date)}
               className={cn(
                 "relative grid aspect-square place-items-center overflow-hidden rounded-xl border bg-white/5 text-[12px] text-muted transition active:scale-95",
                 date === todayIso ? "border-rose-soft" : "border-white/10",
                 cover && "bg-cover bg-center text-white",
               )}
-              style={cover ? { backgroundImage: `url(${cover.dataUrl})` } : undefined}
+              style={cover ? { backgroundImage: `url(${cover})` } : undefined}
             >
               {cover ? (
                 <>
                   <span className="absolute left-1 top-0.5 text-[10px] drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">{day}</span>
-                  {(dayPhotos?.length ?? 0) > 1 && (
+                  <span className="glow-dot" />
+                  {(photosResponse?.length ?? 0) > 1 && (
                     <span className="absolute bottom-0.5 right-1 rounded bg-black/55 px-1 text-[9px]">
-                      {dayPhotos?.length}
+                      {photosResponse?.length}
                     </span>
                   )}
                 </>
@@ -168,13 +162,13 @@ export function PhotoDumpScreen() {
         {viewerDate && (
           <ViewerSheet
             date={viewerDate}
-            photos={byDate.get(viewerDate) ?? []}
+            //photos={byDate.get(viewerDate) ?? []}
             onClose={() => setViewerDate(null)}
-            onAdd={() => {
-              const d = viewerDate;
-              setViewerDate(null);
-              setCameraDate(d);
-            }}
+            // onAdd={() => {
+            //   const d = viewerDate;
+            //   setViewerDate(null);
+            //   setCameraDate(d);
+            // }}
           />
         )}
       </AnimatePresence>
@@ -206,19 +200,29 @@ function prettyDate(date: string) {
 
 function ViewerSheet({
   date,
-  photos,
+  //photos,
   onClose,
-  onAdd,
+  // onAdd,
 }: {
   date: string;
-  photos: Photo[];
+  //photos: Photo[];
   onClose: () => void;
-  onAdd: () => void;
+  // onAdd: () => void;
 }) 
   
 
 {
-  
+  const [photoResponse, setPhotosResponse] = useState<string[] | null >(null)
+  useEffect(() => {
+    async function checkPhotosOnDate(date: string) {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/fetchPhotosViaDate/${date}`)
+      const data = await res.json()
+      console.log("Fetched photo URLs for date", date, ":", data)
+      setPhotosResponse(data) // update the state with the fetched photo URLs
+    }
+
+    checkPhotosOnDate(date); // Call the function to check photos for this date
+  }, [date]);
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-end justify-center bg-black/75 backdrop-blur-sm"
@@ -242,30 +246,33 @@ function ViewerSheet({
           </button>
         </div>
 
+        <div className="flex flex-row gap-2.5">
         <div className="grid place-items-center py-2">
-          <ImageSwiper
-            images={photos.map((p) => p.dataUrl)}
-            cardWidth={260}
-            cardHeight={340}
-          />
+        
+          {photoResponse?.map((url, index) => (
+            <img src={url} key={index} className="mb-2 w-full rounded-2xl object-cover" />
+          ))}
+        </div>
         </div>
 
         <p className="mb-3 text-center text-[12px] text-faint">
-          {photos.length > 1 ? "Swipe to browse · " : ""}
-          {photos.length} {photos.length === 1 ? "memory" : "memories"}
+          {photoResponse?.length && photoResponse.length > 1 ? "Swipe to browse · " : ""}
+          {photoResponse?.length} {photoResponse?.length === 1 ? "memory" : "memories"}
         </p>
 
-        <button
+        {/* <button
           onClick={onAdd}
           className="glass-rose flex w-full items-center justify-center gap-2 rounded-xl py-3 text-[15px] font-semibold text-white active:scale-[0.98]"
         >
           <CameraIcon width={20} height={20} />
           Add another
-        </button>
+        </button> */}
       </motion.div>
     </motion.div>
   );
 }
+
+
 
 function CameraSheet({
   date,
@@ -282,16 +289,11 @@ function CameraSheet({
   const [err, setErr] = useState(false);
   const [photoUrls, setPhotoUrls] = useState<string[]>([]); // state to hold the list of photo URLs
 
-  useEffect(() => {
-    async function checkPhotosOnDate(date: string) {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/fetchPhotosViaDate/${date}`)
-      const data = await res.json()
-      console.log("checked Blogs", data)
-      setPhotoUrls(data) // update the state with the fetched photo URLs
-    }
+  // useEffect(() => {
+    
 
-    checkPhotosOnDate(date);
-  }, [date]);
+  //   checkPhotosOnDate(date);
+  // }, [date]);
 
   // setShot updates only after the end of the function
   const capture = useCallback(async () => {
@@ -347,11 +349,6 @@ function CameraSheet({
           </div>
         ) : (
           <>
-          <div className="flex flex-row">
-          {photoUrls.map((url, index) => (
-            <img src={url} key={index}/> 
-          ))}
-          </div>
           <Webcam
             ref={webcamRef}
             audio={false}
@@ -390,6 +387,7 @@ function CameraSheet({
               </button>
             </>
           ) : (
+            <>
             <button
               disabled={err}
               onClick={capture}
@@ -397,6 +395,14 @@ function CameraSheet({
             >
               Capture
             </button>
+
+            <button
+              onClick={()=> console.log("upload from gallery")}
+              className="glass flex-1 rounded-xl py-3 text-[15px] font-semibold active:scale-[0.98]"
+            >
+              Upload from gallery
+            </button>
+            </>
           )}
           
         </div>
