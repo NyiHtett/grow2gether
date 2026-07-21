@@ -13,10 +13,7 @@ export function ThoughtsScreen() {
   const [text, setText] = useState("");
   const endRef = useRef<HTMLDivElement>(null);
 
-  
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
-
     socket?.on('new_thought', (thought) => {
     setThoughts((prev) => [...prev, thought]);
     });
@@ -45,8 +42,11 @@ export function ThoughtsScreen() {
     return () => {
       socket?.off('new_thought')
     }
-  }, [thoughts]);
+  }, []);
 
+  useEffect(() => {
+    endRef.current?.scrollIntoView({behavior: "smooth"});
+  }, [thoughts]);
   
 
   const submit = async () => {
@@ -92,7 +92,7 @@ export function ThoughtsScreen() {
     const data = await result.json()
     console.log(data)
     setText("");
-    thoughts.push(data.thought); // Update the thoughts state with the new thought
+    setThoughts((prevThoughts) => [...prevThoughts, data.thought]); // Update the thoughts state with the new thought
   };
 
   return (
@@ -104,6 +104,8 @@ export function ThoughtsScreen() {
           </p>
         ) : (
           thoughts.map((t) => {
+            const times = new Date(t.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const date = new Date(t.createdAt).toLocaleDateString([], {month: 'short', day: 'numeric', year: 'numeric'});
             return (
               
               <div key={t.createdAt} className="flex flex-col gap-3 rounded-lg border p-3.5 border-white/15 bg-black/25 m-3">
@@ -111,13 +113,8 @@ export function ThoughtsScreen() {
               <div className="flex items-end gap-2.5 text-sm text-faint">
                 
               {/* <span> {t.name} </span> */}
-              <span> {new Date().toLocaleString([], {
-                year: 'numeric',
-                month: 'long',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-              })} </span>
+              <span> {date} </span>
+              <span> {times} </span>
               </div>
               <span className=""> {t.thought} </span>
               
